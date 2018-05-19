@@ -135,7 +135,7 @@ export const Create = data => {
           console.log(jwres); // => e.g. 403
           dispatch({
             type: CREATE_FAILED,
-            error: jwres.error.message
+            error: jwres.body
           });
           setTimeout(() => {
             dispatch({
@@ -176,7 +176,7 @@ export const Delete = id => {
           console.log(jwres); // => e.g. 403
           dispatch({
             type: DELETE_FAILED,
-            error: jwres.error.message
+            error: jwres.body
           });
           setTimeout(() => {
             dispatch({
@@ -218,7 +218,7 @@ export const Read = () => {
           console.log(jwres); // => e.g. 403
           dispatch({
             type: READ_FAILED,
-            error: jwres.error.message
+            error: jwres.body
           });
           setTimeout(() => {
             dispatch({
