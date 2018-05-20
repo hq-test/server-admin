@@ -13,13 +13,29 @@ export const READ_REQUESTED = 'auction/READ_REQUESTED';
 export const READ_SUCCESS = 'auction/READ_SUCCESS';
 export const READ_FAILED = 'auction/READ_FAILED';
 
+export const START_REQUESTED = 'auction/START_REQUESTED';
+export const START_SUCCESS = 'auction/START_SUCCESS';
+export const START_FAILED = 'auction/START_FAILED';
+
+export const SUBSCRIBE_REQUESTED = 'auction/SUBSCRIBE_REQUESTED';
+export const SUBSCRIBE_SUCCESS = 'auction/SUBSCRIBE_SUCCESS';
+export const SUBSCRIBE_FAILED = 'auction/SUBSCRIBE_FAILED';
+
+export const UNSUBSCRIBE_REQUESTED = 'auction/UNSUBSCRIBE_REQUESTED';
+export const UNSUBSCRIBE_SUCCESS = 'auction/UNSUBSCRIBE_SUCCESS';
+export const UNSUBSCRIBE_FAILED = 'auction/UNSUBSCRIBE_FAILED';
+
 const initialState = {
   list: [],
   isCreating: false,
   isDeleting: false,
   isReading: false,
+  isStarting: false,
   error: null,
-  success: null
+  success: null,
+  isSubscribing: false,
+  isUnSubscribing: false,
+  isSubscribed: false
 };
 
 export default (state = initialState, action) => {
@@ -111,6 +127,72 @@ export default (state = initialState, action) => {
         success: null
       };
 
+    case START_REQUESTED:
+      return {
+        ...state,
+        isStarting: true,
+        error: null,
+        success: null
+      };
+
+    case START_SUCCESS:
+      return {
+        ...state,
+        isStarting: !state.isStarting,
+        error: null,
+        success: 'live auction successfully'
+      };
+
+    case START_FAILED:
+      return {
+        ...state,
+        isStarting: !state.isStarting,
+        error: action.error,
+        success: null
+      };
+
+    case SUBSCRIBE_REQUESTED:
+      return {
+        ...state,
+        isSubscribing: true,
+        error: null,
+        success: null
+      };
+
+    case SUBSCRIBE_SUCCESS:
+      return {
+        ...state,
+        isSubscribing: false,
+        isSubscribed: true
+      };
+
+    case SUBSCRIBE_FAILED:
+      return {
+        ...state,
+        isSubscribing: false,
+        isSubscribed: false
+      };
+
+    case UNSUBSCRIBE_REQUESTED:
+      return {
+        ...state,
+        isUnSubscribing: true,
+        error: null,
+        success: null
+      };
+
+    case UNSUBSCRIBE_SUCCESS:
+      return {
+        ...state,
+        isUnSubscribing: false,
+        isSubscribed: false
+      };
+
+    case UNSUBSCRIBE_FAILED:
+      return {
+        ...state,
+        isUnSubscribing: false
+      };
     default:
       return state;
   }
@@ -126,16 +208,16 @@ export const Create = data => {
     window.IO.socket.request(
       {
         method: 'post',
-        url: 'http://127.0.0.1:1337/auction',
+        url: 'http://127.0.0.1:1337/api/auction/create',
         data: data,
         headers: {}
       },
       function(response, jwres) {
-        if (jwres.error) {
-          console.log(jwres); // => e.g. 403
+        if (!response.result) {
+          console.log(response); // => e.g. 403
           dispatch({
             type: CREATE_FAILED,
-            error: jwres.body
+            error: response.error && response.error.message
           });
           setTimeout(() => {
             dispatch({
@@ -146,7 +228,7 @@ export const Create = data => {
         }
         dispatch({
           type: CREATE_SUCCESS,
-          data: response
+          data: response.data
         });
         setTimeout(() => {
           dispatch({
@@ -168,15 +250,18 @@ export const Delete = id => {
     window.IO.socket.request(
       {
         method: 'delete',
-        url: 'http://127.0.0.1:1337/auction/' + id,
+        url: 'http://127.0.0.1:1337/api/auction/destroy',
+        data: {
+          id
+        },
         headers: {}
       },
       function(response, jwres) {
-        if (jwres.error) {
-          console.log(jwres); // => e.g. 403
+        if (!response.result) {
+          console.log(response); // => e.g. 403
           dispatch({
             type: DELETE_FAILED,
-            error: jwres.body
+            error: response.error && response.error.message
           });
           setTimeout(() => {
             dispatch({
@@ -230,6 +315,114 @@ export const Read = () => {
         dispatch({
           type: READ_SUCCESS,
           data: response
+        });
+      }
+    );
+  };
+};
+
+export const Start = id => {
+  return dispatch => {
+    dispatch({
+      type: DELETE_REQUESTED
+    });
+    console.log('start auction with id', id);
+
+    window.IO.socket.request(
+      {
+        method: 'put',
+        url: 'http://127.0.0.1:1337/api/auction/start',
+        data: {
+          id
+        },
+        headers: {}
+      },
+      function(response, jwres) {
+        if (!response.result) {
+          console.log(response); // => e.g. 403
+          dispatch({
+            type: START_FAILED,
+            error: response.error && response.error.message
+          });
+          setTimeout(() => {
+            dispatch({
+              type: RESET_ERROR
+            });
+          }, 3000);
+          return;
+        }
+        dispatch({
+          type: START_SUCCESS,
+          id
+        });
+        setTimeout(() => {
+          dispatch({
+            type: RESET_SUCCESS
+          });
+        }, 3000);
+      }
+    );
+  };
+};
+
+export const Subscribe = () => {
+  return dispatch => {
+    dispatch({
+      type: SUBSCRIBE_REQUESTED
+    });
+    console.log('subscribing to list of auctions');
+
+    window.IO.socket.request(
+      {
+        method: 'post',
+        url: 'http://127.0.0.1:1337/api/auction/subscribe',
+        headers: {}
+      },
+      function(response, jwres) {
+        if (!response.result) {
+          console.log(response); // => e.g. 403
+          dispatch({
+            type: SUBSCRIBE_FAILED
+          });
+          return;
+        }
+        dispatch({
+          type: SUBSCRIBE_SUCCESS
+        });
+      }
+    );
+  };
+};
+
+export const UnSubscribe = () => {
+  return dispatch => {
+    dispatch({
+      type: UNSUBSCRIBE_REQUESTED
+    });
+    console.log('subscribing to list of auctions');
+
+    window.IO.socket.request(
+      {
+        method: 'post',
+        url: 'http://127.0.0.1:1337/api/auction/unsubscribe',
+        headers: {}
+      },
+      function(response, jwres) {
+        if (!response.result) {
+          console.log(response); // => e.g. 403
+          dispatch({
+            type: UNSUBSCRIBE_FAILED,
+            error: response.error
+          });
+          setTimeout(() => {
+            dispatch({
+              type: RESET_ERROR
+            });
+          }, 3000);
+          return;
+        }
+        dispatch({
+          type: UNSUBSCRIBE_SUCCESS
         });
       }
     );

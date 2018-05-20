@@ -4,14 +4,26 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import EmptyList from '../../components/lists/emptyList.js';
 import List from '../../components/lists/list.js';
-import { Delete, Read } from '../../modules/auction';
 import ErrorBox from '../../components/messageBoxs/error.js';
 import SuccessBox from '../../components/messageBoxs/success.js';
-
+import {
+  Delete,
+  Read,
+  Start,
+  Subscribe as SubscribeAuction,
+  UnSubscribe as UnSubscribeAuction
+} from '../../modules/auction';
 class Auction extends React.Component {
-  // componentDidMount() {
-  //   this.props.Read();
-  // }
+  componentDidMount() {
+    this.props.SubscribeAuction();
+    window.IO.socket.on('auction_model', function(data) {
+      console.log('>>receive auction model message', data);
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.UnSubscribeAuction();
+  }
 
   render() {
     const props = this.props;
@@ -58,6 +70,7 @@ class Auction extends React.Component {
             ]}
             onDelete={props.Delete}
             onView={props.View}
+            onStart={props.Start}
           />
         ) : (
           <EmptyList />
@@ -76,8 +89,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      SubscribeAuction,
+      UnSubscribeAuction,
       Read,
       Delete,
+      Start,
       View: id => push('/auction/view/' + id),
       redirectAuctionAdd: () => push('/auction/add')
     },

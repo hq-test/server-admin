@@ -1,7 +1,7 @@
 import React from 'react';
 import FieldRenderer from '../renderer/field.js';
 
-const List = ({ items, options, onDelete, onView }) => (
+const List = ({ items, options, onDelete, onView, onStart }) => (
   <div>
     <table style={{ width: '100%', marginTop: 10 }}>
       <thead style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
@@ -31,6 +31,9 @@ const List = ({ items, options, onDelete, onView }) => (
                 );
               })}
               <td>
+                {onStart && !item.isRunning ? (
+                  <button onClick={() => onStart(item.id)}>Start</button>
+                ) : null}
                 {onView ? (
                   <button onClick={() => onView(item.id)}>View</button>
                 ) : null}

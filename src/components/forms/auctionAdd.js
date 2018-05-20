@@ -8,7 +8,7 @@ class AuctionAddForm extends React.Component {
     super(props);
     this.state = {
       title: '',
-      room: null,
+      room: '',
       minimumAllowedBid: 0,
       isActive: true
     };
@@ -27,10 +27,10 @@ class AuctionAddForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    if (this.state.title) {
+    if (this.state.room && this.state.minimumAllowedBid > 0) {
       this.props.Create(this.state);
     } else {
-      alert('Please fill required fields and try again');
+      alert('Please fill required fields with valid information and try again');
     }
   }
 
@@ -53,15 +53,17 @@ class AuctionAddForm extends React.Component {
             name="room"
             value={this.state.value}
             onChange={this.handleChange}>
-            {this.props.rooms.map(item => {
-              return (
-                item.isActive && (
-                  <option key={item.id} value={item.id}>
-                    {item.title}
-                  </option>
-                )
-              );
-            })}
+            <option key="0" value="" />
+            {this.props.rooms.length &&
+              this.props.rooms.map(item => {
+                return (
+                  item.isActive && (
+                    <option key={item.id} value={item.id}>
+                      {item.title}
+                    </option>
+                  )
+                );
+              })}
           </select>
         </label>
         <br />
