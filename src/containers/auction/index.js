@@ -11,13 +11,24 @@ import {
   Read,
   Start,
   Subscribe as SubscribeAuction,
-  UnSubscribe as UnSubscribeAuction
+  UnSubscribe as UnSubscribeAuction,
+  HandleClientUpdate as HandleClientUpdateAuction,
+  HandleClientDestroy as HandleClientDestroyAuction
 } from '../../modules/auction';
+
 class Auction extends React.Component {
   componentDidMount() {
     this.props.SubscribeAuction();
-    window.IO.socket.on('auction_model', function(data) {
-      console.log('>>receive auction model message', data);
+    const that = this;
+
+    window.IO.socket.on('auction_model_update', function(data) {
+      console.log('>>receive auction model update message', data);
+      that.props.HandleClientUpdateAuction(data);
+    });
+
+    window.IO.socket.on('auction_model_destroy', function(data) {
+      console.log('>>receive auction model destroy message', data);
+      that.props.HandleClientDestroyAuction(data.id);
     });
   }
 
@@ -91,6 +102,8 @@ const mapDispatchToProps = dispatch =>
     {
       SubscribeAuction,
       UnSubscribeAuction,
+      HandleClientUpdateAuction,
+      HandleClientDestroyAuction,
       Read,
       Delete,
       Start,

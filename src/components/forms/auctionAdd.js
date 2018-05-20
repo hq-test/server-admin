@@ -10,7 +10,8 @@ class AuctionAddForm extends React.Component {
       title: '',
       room: '',
       minimumAllowedBid: 0,
-      isActive: true
+      isActive: true,
+      isRunning: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -84,6 +85,16 @@ class AuctionAddForm extends React.Component {
             name="isActive"
             type="checkbox"
             checked={this.state.isActive}
+            onChange={this.handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Make it Live:
+          <input
+            name="isRunning"
+            type="checkbox"
+            checked={this.state.isRunning}
             onChange={this.handleChange}
           />
         </label>

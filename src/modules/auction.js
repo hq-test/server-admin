@@ -25,6 +25,13 @@ export const UNSUBSCRIBE_REQUESTED = 'auction/UNSUBSCRIBE_REQUESTED';
 export const UNSUBSCRIBE_SUCCESS = 'auction/UNSUBSCRIBE_SUCCESS';
 export const UNSUBSCRIBE_FAILED = 'auction/UNSUBSCRIBE_FAILED';
 
+export const CLIENT_UPDATE_CREATE_SUCCESS =
+  'auction/CLIENT_UPDATE_CREATE_SUCCESS';
+export const CLIENT_UPDATE_UPDATE_SUCCESS =
+  'auction/CLIENT_UPDATE_UPDATE_SUCCESS';
+export const CLIENT_UPDATE_DESTROY_SUCCESS =
+  'auction/CLIENT_UPDATE_DESTROY_SUCCESS';
+
 const initialState = {
   list: [],
   isCreating: false,
@@ -88,7 +95,6 @@ export default (state = initialState, action) => {
     case CREATE_SUCCESS:
       return {
         ...state,
-        list: [action.data, ...state.list],
         isCreating: !state.isCreating,
         error: null,
         success: 'created successfully'
@@ -136,6 +142,7 @@ export default (state = initialState, action) => {
       };
 
     case START_SUCCESS:
+      console.log('new start', action.data);
       return {
         ...state,
         isStarting: !state.isStarting,
@@ -193,6 +200,33 @@ export default (state = initialState, action) => {
         ...state,
         isUnSubscribing: false
       };
+
+    case CLIENT_UPDATE_CREATE_SUCCESS:
+      return {
+        ...state,
+        list: [...state.list, action.data],
+        error: null,
+        success: null
+      };
+
+    case CLIENT_UPDATE_UPDATE_SUCCESS:
+      return {
+        ...state,
+        list: state.list.map(
+          item => (item.id !== action.data.id ? item : action.data)
+        ),
+        error: null,
+        success: null
+      };
+
+    case CLIENT_UPDATE_DESTROY_SUCCESS:
+      return {
+        ...state,
+        list: state.list.filter(item => item.id !== action.id),
+        error: null,
+        success: null
+      };
+
     default:
       return state;
   }
@@ -353,7 +387,7 @@ export const Start = id => {
         }
         dispatch({
           type: START_SUCCESS,
-          id
+          data: response.data
         });
         setTimeout(() => {
           dispatch({
@@ -426,5 +460,37 @@ export const UnSubscribe = () => {
         });
       }
     );
+  };
+};
+
+export const HandleClientCreate = data => {
+  console.log('HandleClientCreate', data);
+  return dispatch => {
+    dispatch({
+      type: CLIENT_UPDATE_CREATE_SUCCESS,
+      data: data
+    });
+  };
+};
+
+export const HandleClientUpdate = data => {
+  console.log('HandleClientUpdate', data);
+
+  return dispatch => {
+    dispatch({
+      type: CLIENT_UPDATE_UPDATE_SUCCESS,
+      data: data
+    });
+  };
+};
+
+export const HandleClientDestroy = id => {
+  console.log('HandleClientDestroy', id);
+
+  return dispatch => {
+    dispatch({
+      type: CLIENT_UPDATE_DESTROY_SUCCESS,
+      id: id
+    });
   };
 };
