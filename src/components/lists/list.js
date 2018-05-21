@@ -22,7 +22,11 @@ const List = ({ items, options, onDelete, onView, onStart }) => (
                     <FieldRenderer
                       type={optionItem.renderer}
                       value={item[optionItem.field]}
+                      fieldName={optionItem.field}
                       nested={optionItem.nested ? optionItem.nested : false}
+                      dependancyFieldValue={
+                        optionItem.field === 'endAt' ? item['startAt'] : null
+                      }
                       nestedField={
                         optionItem.nestedField ? optionItem.nestedField : false
                       }

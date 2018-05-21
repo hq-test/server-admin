@@ -71,7 +71,11 @@ class Auction extends React.Component {
                 field: 'startAt',
                 renderer: 'datetime'
               },
-              { headerTitle: 'End At', field: 'endAt', renderer: 'datetime' },
+              {
+                headerTitle: 'Duration',
+                field: 'endAt',
+                renderer: 'datetime'
+              },
               {
                 headerTitle: 'Live',
                 field: 'isRunning',
