@@ -1,11 +1,13 @@
 import React from 'react';
 import * as moment from 'moment';
+import Countdown from 'react-countdown-now';
+
 var updateDatetime;
 
 class FieldRenderer extends React.Component {
   constructor(props) {
     super(props);
-    if (this.props.type === 'datetime') {
+    if (props.type === 'datetime') {
       this.state = {
         startDate: moment(props.value)
       };
@@ -49,12 +51,20 @@ class FieldRenderer extends React.Component {
       case 'datetime':
         return (
           <span>
-            {value
-              ? fieldName === 'endAt' && dependancyFieldValue
-                ? moment(value).diff(dependancyFieldValue, 'minutes') +
+            {value ? (
+              fieldName === 'endAt' && dependancyFieldValue ? (
+                value > new Date().getTime() ? (
+                  <Countdown date={value} />
+                ) : (
+                  moment(value).diff(dependancyFieldValue, 'minutes') +
                   ' Minutes'
-                : this.state.startDate.fromNow()
-              : '-'}
+                )
+              ) : (
+                this.state.startDate.fromNow()
+              )
+            ) : (
+              '-'
+            )}
           </span>
         );
 

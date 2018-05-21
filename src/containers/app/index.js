@@ -48,6 +48,15 @@ class App extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    window.IO.socket.off('connect');
+    window.IO.socket.off('message');
+    window.IO.socket.off('reconnect');
+    window.IO.socket.off('reconnecting');
+    window.IO.socket.off('disconnect');
+    window.IO.socket.off('error');
+  }
+
   render() {
     return (
       <div>

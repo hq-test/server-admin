@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add react-native --save
+  /usr/local/bin/node /usr/local/bin/yarn add react-countdown-now
 
 PATH: 
   /Users/APZ/Library/Android/sdk/platform-tools:/Users/APZ/Library/Android/sdk/tools:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/APZ/Library/Android/sdk/platform-tools:/Users/APZ/Library/Android/sdk/tools
@@ -46,10 +46,7 @@ npm manifest:
     },
     "homepage": "https://cra-redux-router-thunk.herokuapp.com",
     "lint-staged": {
-      "*.{js,json,css,md}": [
-        "prettier --write",
-        "git add"
-      ]
+      "*.{js,json,css,md}": ["prettier --write", "git add"]
     }
   }
 
@@ -7847,5 +7844,5 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-  Error: EACCES: permission denied, mkdir '/APZ/work/hotel-quickly/server-admin/node_modules/@babel/core'
+  Error: EACCES: permission denied, mkdir '/APZ/work/hotel-quickly/server-admin/node_modules/@babel/highlight/node_modules'
       at Error (native)

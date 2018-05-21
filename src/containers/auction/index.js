@@ -34,6 +34,8 @@ class Auction extends React.Component {
 
   componentWillUnmount() {
     this.props.UnSubscribeAuction();
+    window.IO.socket.off('auction_model_update');
+    window.IO.socket.off('auction_model_destroy');
   }
 
   render() {
