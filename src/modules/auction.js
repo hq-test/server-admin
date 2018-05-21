@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 export const RESET_ERROR = 'auction/RESET_ERROR';
 export const RESET_SUCCESS = 'auction/RESET_SUCCESS';
 
@@ -204,7 +206,7 @@ export default (state = initialState, action) => {
     case CLIENT_UPDATE_CREATE_SUCCESS:
       return {
         ...state,
-        list: [...state.list, action.data],
+        list: _.orderBy([action.data, ...state.list], 'endAt', 'DESC'),
         error: null,
         success: null
       };
@@ -212,8 +214,12 @@ export default (state = initialState, action) => {
     case CLIENT_UPDATE_UPDATE_SUCCESS:
       return {
         ...state,
-        list: state.list.map(
-          item => (item.id !== action.data.id ? item : action.data)
+        list: _.orderBy(
+          state.list.map(
+            item => (item.id !== action.data.id ? item : action.data)
+          ),
+          'endAt',
+          'DESC'
         ),
         error: null,
         success: null
@@ -328,16 +334,16 @@ export const Read = () => {
     window.IO.socket.request(
       {
         method: 'get',
-        url: 'http://127.0.0.1:1337/auction',
+        url: 'http://127.0.0.1:1337/api/auction/read/all',
         //data: data,
         headers: {}
       },
       function(response, jwres) {
-        if (jwres.error) {
-          console.log(jwres); // => e.g. 403
+        if (!response.result) {
+          console.log(response); // => e.g. 403
           dispatch({
             type: READ_FAILED,
-            error: jwres.body
+            error: response.error && response.error.message
           });
           setTimeout(() => {
             dispatch({
@@ -348,7 +354,7 @@ export const Read = () => {
         }
         dispatch({
           type: READ_SUCCESS,
-          data: response
+          data: response.data
         });
       }
     );

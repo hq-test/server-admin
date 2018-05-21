@@ -9,6 +9,7 @@
     "react-scripts": "^1.0.17"
   },
   "dependencies": {
+    "lodash": "^4.17.10",
     "moment": "^2.22.1",
     "react": "^16.2.0",
     "react-countdown-now": "^1.3.0",
