@@ -69,7 +69,7 @@ class FieldRenderer extends React.Component {
         );
 
       case 'price':
-        return <span>{value} BHT</span>;
+        return <span>{value.toLocaleString()} BHT</span>;
 
       case 'string':
       default:
