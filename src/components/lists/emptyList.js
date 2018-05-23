@@ -1,9 +1,7 @@
 import React from 'react';
 
-const EmptyList = () => {
-  return (
-    <h2 style={{ color: 'gray' }}>Empty List, You can define a new one</h2>
-  );
+const EmptyList = ({ message = 'Empty List, You can define a new one' }) => {
+  return <h2 style={{ color: 'gray' }}>{message}</h2>;
 };
 
 export default EmptyList;
