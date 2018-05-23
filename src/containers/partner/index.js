@@ -41,7 +41,7 @@ class Partner extends React.Component {
             onDelete={props.Delete}
           />
         ) : (
-          <EmptyList />
+          <EmptyList message="List is empty, Create a new one" />
         )}
       </div>
     );

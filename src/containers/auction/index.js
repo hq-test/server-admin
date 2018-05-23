@@ -90,7 +90,7 @@ class Auction extends React.Component {
             onStart={props.Start}
           />
         ) : (
-          <EmptyList />
+          <EmptyList message="List is empty, Create a new one" />
         )}
       </div>
     );
