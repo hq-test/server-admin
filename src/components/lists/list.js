@@ -35,11 +35,8 @@ const List = ({ items, options, onDelete, onView, onStart }) => (
                 );
               })}
               <td>
-                {onStart && !item.isRunning ? (
+                {onStart && !item.isRunning && !item.startAt && !item.endAt ? (
                   <button onClick={() => onStart(item.id)}>Start</button>
-                ) : null}
-                {onView ? (
-                  <button onClick={() => onView(item.id)}>View</button>
                 ) : null}
                 <button onClick={() => onDelete(item.id)}>Delete</button>
               </td>

@@ -86,7 +86,6 @@ class Auction extends React.Component {
               { headerTitle: 'Active', field: 'isActive', renderer: 'boolean' }
             ]}
             onDelete={props.Delete}
-            onView={props.View}
             onStart={props.Start}
           />
         ) : (
@@ -113,7 +112,6 @@ const mapDispatchToProps = dispatch =>
       Read,
       Delete,
       Start,
-      View: id => push('/auction/view/' + id),
       redirectAuctionAdd: () => push('/auction/add')
     },
     dispatch
