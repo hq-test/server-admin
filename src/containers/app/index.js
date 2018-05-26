@@ -68,10 +68,18 @@ class App extends React.Component {
           }
         />
         <header>
-          <Link to="/">Home</Link>
-          <Link to="/partner">Partner</Link>
-          <Link to="/room">Room</Link>
-          <Link to="/auction">Auction</Link>
+          <Link style={{ padding: 10 }} to="/">
+            Home
+          </Link>
+          <Link style={{ padding: 10 }} to="/partner">
+            Partner
+          </Link>
+          <Link style={{ padding: 10 }} to="/room">
+            Room
+          </Link>
+          <Link style={{ padding: 10 }} to="/auction">
+            Auction
+          </Link>
         </header>
 
         <main>
