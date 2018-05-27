@@ -1,3 +1,14 @@
+/***************************************************************************
+ *                                                                          *
+ * Room Module                                                              *
+ *                                                                          *
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                          *
+ * Actions                                                                  *
+ *                                                                          *
+ ***************************************************************************/
 export const RESET_ERROR = 'room/RESET_ERROR';
 export const RESET_SUCCESS = 'room/RESET_SUCCESS';
 
@@ -13,15 +24,25 @@ export const READ_REQUESTED = 'room/READ_REQUESTED';
 export const READ_SUCCESS = 'room/READ_SUCCESS';
 export const READ_FAILED = 'room/READ_FAILED';
 
+/***************************************************************************
+ *                                                                          *
+ * Initial State                                                            *
+ *                                                                          *
+ ***************************************************************************/
 const initialState = {
-  list: [],
-  isCreating: false,
-  isDeleting: false,
-  isReading: false,
-  error: null,
-  success: null
+  list: [], // list of rooms
+  isCreating: false, // is in creating process
+  isDeleting: false, // is in deleting process
+  isReading: false, // is in reading process and filling room list
+  error: null, // error message store here
+  success: null // success message store here
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Reducers                                                                 *
+ *                                                                          *
+ ***************************************************************************/
 export default (state = initialState, action) => {
   switch (action.type) {
     case RESET_ERROR:
@@ -116,12 +137,22 @@ export default (state = initialState, action) => {
   }
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Action Creators                                                          *
+ *                                                                          *
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                          *
+ * Create room                                                              *
+ *                                                                          *
+ ***************************************************************************/
 export const Create = data => {
   return dispatch => {
     dispatch({
       type: CREATE_REQUESTED
     });
-    console.log('create new room with data', data);
 
     window.IO.socket.request(
       {
@@ -132,7 +163,6 @@ export const Create = data => {
       },
       function(response, jwres) {
         if (jwres.error) {
-          console.log(jwres); // => e.g. 403
           dispatch({
             type: CREATE_FAILED,
             error: jwres.body
@@ -158,12 +188,16 @@ export const Create = data => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Delete room                                                              *
+ *                                                                          *
+ ***************************************************************************/
 export const Delete = id => {
   return dispatch => {
     dispatch({
       type: DELETE_REQUESTED
     });
-    console.log('delete room with id', id);
 
     window.IO.socket.request(
       {
@@ -173,7 +207,6 @@ export const Delete = id => {
       },
       function(response, jwres) {
         if (jwres.error) {
-          console.log(jwres); // => e.g. 403
           dispatch({
             type: DELETE_FAILED,
             error: jwres.body
@@ -199,12 +232,16 @@ export const Delete = id => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Read room list                                                           *
+ *                                                                          *
+ ***************************************************************************/
 export const Read = () => {
   return dispatch => {
     dispatch({
       type: READ_REQUESTED
     });
-    console.log('reading list of rooms');
 
     window.IO.socket.request(
       {
@@ -215,7 +252,6 @@ export const Read = () => {
       },
       function(response, jwres) {
         if (jwres.error) {
-          console.log(jwres); // => e.g. 403
           dispatch({
             type: READ_FAILED,
             error: jwres.body

@@ -22,12 +22,10 @@ class Auction extends React.Component {
     const that = this;
 
     window.IO.socket.on('auction_model_update', function(data) {
-      console.log('>>receive auction model update message', data);
       that.props.HandleClientUpdateAuction(data);
     });
 
     window.IO.socket.on('auction_model_destroy', function(data) {
-      console.log('>>receive auction model destroy message', data);
       that.props.HandleClientDestroyAuction(data.id);
     });
   }

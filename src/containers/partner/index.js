@@ -9,10 +9,6 @@ import ErrorBox from '../../components/messageBoxs/error.js';
 import SuccessBox from '../../components/messageBoxs/success.js';
 
 class Partner extends React.Component {
-  // componentDidMount() {
-  //   this.props.Read();
-  // }
-
   render() {
     const props = this.props;
     return (

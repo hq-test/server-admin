@@ -1,5 +1,21 @@
+/***************************************************************************
+ *                                                                          *
+ * Auction Module                                                           *
+ *                                                                          *
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                          *
+ * Load Libraries                                                           *
+ *                                                                          *
+ ***************************************************************************/
 var _ = require('lodash');
 
+/***************************************************************************
+ *                                                                          *
+ * Actions                                                                  *
+ *                                                                          *
+ ***************************************************************************/
 export const RESET_ERROR = 'auction/RESET_ERROR';
 export const RESET_SUCCESS = 'auction/RESET_SUCCESS';
 
@@ -34,19 +50,29 @@ export const CLIENT_UPDATE_UPDATE_SUCCESS =
 export const CLIENT_UPDATE_DESTROY_SUCCESS =
   'auction/CLIENT_UPDATE_DESTROY_SUCCESS';
 
+/***************************************************************************
+ *                                                                          *
+ * Initial State                                                            *
+ *                                                                          *
+ ***************************************************************************/
 const initialState = {
-  list: [],
-  isCreating: false,
-  isDeleting: false,
-  isReading: false,
-  isStarting: false,
-  error: null,
-  success: null,
-  isSubscribing: false,
-  isUnSubscribing: false,
-  isSubscribed: false
+  list: [], // list of auctions
+  isCreating: false, // is creating a new auction
+  isDeleting: false, // is deleting an auction
+  isReading: false, // is in reading process and filling auction list
+  isStarting: false, // is starting execute an auction
+  error: null, // error message of action creators
+  success: null, // success message of action creators
+  isSubscribing: false, // is in subscribe process
+  isUnSubscribing: false, // is in unsubscibe process
+  isSubscribed: false // does it currently subscibed to auction room
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Reducers                                                                 *
+ *                                                                          *
+ ***************************************************************************/
 export default (state = initialState, action) => {
   switch (action.type) {
     case RESET_ERROR:
@@ -206,7 +232,10 @@ export default (state = initialState, action) => {
     case CLIENT_UPDATE_CREATE_SUCCESS:
       return {
         ...state,
+
+        // reorder the list of auctions according the duration descendant
         list: _.orderBy([action.data, ...state.list], 'endAt', 'DESC'),
+
         error: null,
         success: null
       };
@@ -214,6 +243,8 @@ export default (state = initialState, action) => {
     case CLIENT_UPDATE_UPDATE_SUCCESS:
       return {
         ...state,
+
+        // reorder the list of auctions according the duration descendant
         list: _.orderBy(
           state.list.map(
             item => (item.id !== action.data.id ? item : action.data)
@@ -221,6 +252,7 @@ export default (state = initialState, action) => {
           'endAt',
           'DESC'
         ),
+
         error: null,
         success: null
       };
@@ -238,12 +270,22 @@ export default (state = initialState, action) => {
   }
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Action Creators                                                          *
+ *                                                                          *
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                          *
+ * Create new auction                                                       *
+ *                                                                          *
+ ***************************************************************************/
 export const Create = data => {
   return dispatch => {
     dispatch({
       type: CREATE_REQUESTED
     });
-    console.log('create new auction with data', data);
 
     window.IO.socket.request(
       {
@@ -254,7 +296,6 @@ export const Create = data => {
       },
       function(response, jwres) {
         if (!response.result) {
-          console.log(response); // => e.g. 403
           dispatch({
             type: CREATE_FAILED,
             error: response.error && response.error.message
@@ -280,12 +321,16 @@ export const Create = data => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Remove auction                                                           *
+ *                                                                          *
+ ***************************************************************************/
 export const Delete = id => {
   return dispatch => {
     dispatch({
       type: DELETE_REQUESTED
     });
-    console.log('delete auction with id', id);
 
     window.IO.socket.request(
       {
@@ -298,7 +343,6 @@ export const Delete = id => {
       },
       function(response, jwres) {
         if (!response.result) {
-          console.log(response); // => e.g. 403
           dispatch({
             type: DELETE_FAILED,
             error: response.error && response.error.message
@@ -324,12 +368,16 @@ export const Delete = id => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Read auction list                                                        *
+ *                                                                          *
+ ***************************************************************************/
 export const Read = () => {
   return dispatch => {
     dispatch({
       type: READ_REQUESTED
     });
-    console.log('reading list of auctions');
 
     window.IO.socket.request(
       {
@@ -340,7 +388,6 @@ export const Read = () => {
       },
       function(response, jwres) {
         if (!response.result) {
-          console.log(response); // => e.g. 403
           dispatch({
             type: READ_FAILED,
             error: response.error && response.error.message
@@ -361,12 +408,16 @@ export const Read = () => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Start executing an auction                                               *
+ *                                                                          *
+ ***************************************************************************/
 export const Start = id => {
   return dispatch => {
     dispatch({
       type: DELETE_REQUESTED
     });
-    console.log('start auction with id', id);
 
     window.IO.socket.request(
       {
@@ -379,7 +430,6 @@ export const Start = id => {
       },
       function(response, jwres) {
         if (!response.result) {
-          console.log(response); // => e.g. 403
           dispatch({
             type: START_FAILED,
             error: response.error && response.error.message
@@ -405,12 +455,16 @@ export const Start = id => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Subscribe to auction model                                               *
+ *                                                                          *
+ ***************************************************************************/
 export const Subscribe = () => {
   return dispatch => {
     dispatch({
       type: SUBSCRIBE_REQUESTED
     });
-    console.log('subscribing to list of auctions');
 
     window.IO.socket.request(
       {
@@ -420,7 +474,6 @@ export const Subscribe = () => {
       },
       function(response, jwres) {
         if (!response.result) {
-          console.log(response); // => e.g. 403
           dispatch({
             type: SUBSCRIBE_FAILED
           });
@@ -434,12 +487,16 @@ export const Subscribe = () => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Unsubscribe to an auction model                                          *
+ *                                                                          *
+ ***************************************************************************/
 export const UnSubscribe = () => {
   return dispatch => {
     dispatch({
       type: UNSUBSCRIBE_REQUESTED
     });
-    console.log('subscribing to list of auctions');
 
     window.IO.socket.request(
       {
@@ -449,7 +506,6 @@ export const UnSubscribe = () => {
       },
       function(response, jwres) {
         if (!response.result) {
-          console.log(response); // => e.g. 403
           dispatch({
             type: UNSUBSCRIBE_FAILED,
             error: response.error && response.error.message
@@ -469,8 +525,12 @@ export const UnSubscribe = () => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Update auction list when a create message receive                        *
+ *                                                                          *
+ ***************************************************************************/
 export const HandleClientCreate = data => {
-  console.log('HandleClientCreate', data);
   return dispatch => {
     dispatch({
       type: CLIENT_UPDATE_CREATE_SUCCESS,
@@ -479,9 +539,12 @@ export const HandleClientCreate = data => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Update auction list when an update message receive                       *
+ *                                                                          *
+ ***************************************************************************/
 export const HandleClientUpdate = data => {
-  console.log('HandleClientUpdate', data);
-
   return dispatch => {
     dispatch({
       type: CLIENT_UPDATE_UPDATE_SUCCESS,
@@ -490,9 +553,12 @@ export const HandleClientUpdate = data => {
   };
 };
 
+/***************************************************************************
+ *                                                                          *
+ * Update auction list when a remove message receive                        *
+ *                                                                          *
+ ***************************************************************************/
 export const HandleClientDestroy = id => {
-  console.log('HandleClientDestroy', id);
-
   return dispatch => {
     dispatch({
       type: CLIENT_UPDATE_DESTROY_SUCCESS,

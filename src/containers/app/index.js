@@ -19,31 +19,22 @@ class App extends React.Component {
   componentDidMount() {
     var that = this;
     window.IO.socket.on('connect', function() {
-      console.log('>>connected ;)', window.IO.socket._raw.id);
       that.setState({ isSocketConnect: true });
-    });
-
-    window.IO.socket.on('message', function(data) {
-      console.log('>>receive in client room', data);
     });
 
     window.IO.socket.on('reconnect', function() {
-      console.log('>>reconnected ... :D', window.IO.socket._raw.id);
       that.setState({ isSocketConnect: true });
     });
     window.IO.socket.on('reconnecting', function() {
-      console.log('>>reconnecting ...');
       that.setState({ isSocketConnect: false });
     });
 
     window.IO.socket.on('disconnect', function(data) {
-      console.log('>>disconnected', data);
       window.IO.socket._raw.io._reconnection = true;
       that.setState({ isSocketConnect: false });
     });
 
     window.IO.socket.on('error', () => {
-      console.log('>>error ...');
       that.setState({ isSocketConnect: false });
     });
   }
@@ -67,6 +58,8 @@ class App extends React.Component {
               : 'socketDisconnected'
           }
         />
+
+        {/* show navigation for pages agter login */}
         <header>
           <Link style={{ padding: 10 }} to="/">
             Home
@@ -82,6 +75,7 @@ class App extends React.Component {
           </Link>
         </header>
 
+        {/* pages placeholder with routes */}
         <main>
           <Route exact path="/" component={Home} />
           <Route exact path="/partner" component={Partner} />
