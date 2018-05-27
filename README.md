@@ -1,22 +1,39 @@
-<p align="center"><a href="https://medium.com/@notrab/getting-started-with-create-react-app-redux-react-router-redux-thunk-d6a19259f71f"><img src="https://i.imgur.com/PATsTx2.png" title="View tutorial" alt="React, React Router, Redux and Redux Thunk" width="900"></a></p>
+# HQ Assignment - Admin Panel
 
-[![Dependency Status](https://dependencyci.com/github/notrab/create-react-app-redux/badge)](https://dependencyci.com/github/notrab/create-react-app-redux)
+This is a react-create-app framework based on React library with redux, redux-thunk, react-router, react-router-redux components combination. I customize it for this assignment.
 
-* Tutorial: [Getting started with create-react-app, Redux, React Router & Redux Thunk](https://medium.com/@notrab/getting-started-with-create-react-app-redux-react-router-redux-thunk-d6a19259f71f)
-* Example: [View on Heroku](https://cra-redux-router-thunk.herokuapp.com/) 🙌
+### Installation
 
-## Installation
+Install the dependencies and devDependencies and start the server.
 
-```bash
-git clone https://github.com/notrab/create-react-app-redux.git
-cd create-react-app-redux
-yarn
+```sh
+$ yarn
 ```
 
-## Get started
+### Plugins & Tools
 
-```bash
-yarn start
+This App is currently extended with the following plugins.
+
+| Plugin                                   | About                                                                                  |
+| ---------------------------------------- | -------------------------------------------------------------------------------------- |
+| framework and boilerplate configurations | [Github](https://github.com/notrab/create-react-app-redux)                             |
+| Socket IO implementation with sails js   | [Documentation](https://sailsjs.com/documentation/reference/web-sockets/socket-client) |
+| Moment                                   | [website](https://momentjs.com/)                                                       |
+| Lodash                                   | [website](https://lodash.com/)                                                         |
+| react Toast                              | (Github)[https://github.com/fkhadra/react-toastify]                                    |
+
+### Run
+
+```sh
+$ yarn start
 ```
 
-This boilerplate is built using [create-react-app](https://github.com/facebookincubator/create-react-app) so you will want to read the User Guide for more goodies.
+### Test in browser
+
+```sh
+127.0.0.1:3002
+```
+
+### Links
+
+* [create-react-app, Redux, React Router & Redux Thunk Tutorials](https://medium.com/@notrab/getting-started-with-create-react-app-redux-react-router-redux-thunk-d6a19259f71f)
