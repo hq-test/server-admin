@@ -1,5 +1,13 @@
 # HQ Assignment - Admin Panel
 
+This is a part of this assignment [Github](https://github.com/HQInterview/backend-developer-assignment-v2)
+
+Access other parts of this assignment :
+
+* [Server API](https://github.com/hq-test/server-api)
+* [Admin Panel](https://github.com/hq-test/server-admin)
+* [Partner Panel](https://github.com/hq-test/server-partners)
+
 This is a react-create-app framework based on React library with redux, redux-thunk, react-router, react-router-redux components combination. I customize it for this assignment.
 
 ### Installation
@@ -20,7 +28,7 @@ This App is currently extended with the following plugins.
 | Socket IO implementation with sails js   | [Documentation](https://sailsjs.com/documentation/reference/web-sockets/socket-client) |
 | Moment                                   | [website](https://momentjs.com/)                                                       |
 | Lodash                                   | [website](https://lodash.com/)                                                         |
-| react Toast                              | (Github)[https://github.com/fkhadra/react-toastify]                                    |
+| react Toast                              | [Github](https://github.com/fkhadra/react-toastify)                                    |
 
 ### Run
 
