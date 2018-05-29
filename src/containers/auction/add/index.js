@@ -16,7 +16,6 @@ class AuctionAdd extends React.Component {
     this.props.SubscribeAuction();
     const that = this;
     window.IO.socket.on('auction_model_create', function(data) {
-      console.log('>>receive auction model create message', data);
       that.props.HandleClientCreateAuction(data);
     });
   }
