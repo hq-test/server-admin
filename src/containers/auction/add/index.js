@@ -23,6 +23,7 @@ class AuctionAdd extends React.Component {
 
   componentWillUnmount() {
     this.props.UnSubscribeAuction();
+    window.IO.socket.off('auction_model_create');
   }
 
   render() {
